@@ -1,0 +1,99 @@
+\documentclass[uplatex,dvipdfmx,a4j]{jsreport}
+\usepackage{thesis}
+
+\begin{document}
+  \chapter{文字列制約の充足可能性判定} \label{chap:solve}
+
+  文字列制約$\varphi$の充足可能性判定を以下のように行う.
+  ただし, $\varphi_{sl} \defeq \bigwedge_{m \leq i \le n} \varphi_i$であるとする.
+  \begin{enumerate}
+    \item 直線制約をSymbolic SSTとして, 正規制約をSFAとして表現する.  \label{step_1}
+    \item SFAのSSTによる逆像を順に取る.                            \label{step_2}
+    \item 最終的に生成されたSFAの空性を判定することで解を得る.         \label{step_3}
+  \end{enumerate}
+  {\bf step\ref{step_1}}
+
+  Zhuによるソルバと同様にして変換を行う.
+  $x_i$に対応して得られるSST$S_i$はセパレーター$\#$として
+  入力$w_0 \# \ldots \# w_{i - 1} \#$に対して$w_0 \# \ldots \# w_i \#$を出力するもので,
+  $w_i$が$x_i$の制約を満たすものとなるように構成される.
+  \begin{example}
+    $x_2 = \mbox{reverse}(x_0)$に対して出力されるSSTは以下のようになる.
+    $\varphi_{sep}(\sigma) = (\sigma = \#)$とする.
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        %nodes
+        \node[state,initial]    at (-5, 0) (p0) {$p_0$};
+        \node[state]            at (0, 0)  (p1) {$p_1$};
+        \node[state,accepting]  at (5, 0)  (p2) {$p_2$};
+        %output function
+        \node[right=2 of p2] {$F(p_2) = x r \#$};
+        %arrows
+        \draw [->]
+          (p0)
+            edge[loop above] node{
+              $\lnot \varphi_{sep} /
+              \left[
+                \begin{aligned}
+                  x &= x \cdot \id \\
+                  r &= \id \cdot r
+                \end{aligned}
+              \right]$
+            } ()
+            edge[right] node[below=0.3] {
+               $\varphi_{sep} /
+               \left[
+                 \begin{aligned}
+                   x &= x \cdot \id \\
+                   r &= r
+                 \end{aligned}
+               \right]$
+            } (p1)
+          (p1)
+            edge[loop above] node{
+              $\lnot \varphi_{sep} /
+              \left[
+                \begin{aligned}
+                  x &= x \cdot \id \\
+                  r &= r
+                \end{aligned}
+              \right]$
+            } ()
+            edge[right] node[below=0.3] {
+              $\varphi_{sep} /
+              \left[
+                \begin{aligned}
+                  x &= x \cdot \id \\
+                  r &= r
+                \end{aligned}
+              \right]$
+            } (p2)
+        ;
+      \end{tikzpicture}
+    \end{center}
+  \end{example}
+  ただし, 正規制約の情報をSSTに入れることはせず, $x_i$の制約$\varphi_i$の計算に必要な情報を用いて
+  SSTの構成を行う.
+
+  正規制約$\bigwedge_{0 \leq i \le n} x_i \in R_i$より
+  $R_0 \# R_1 \# \cdots \# R_{n - 1} \#$に対応するSFAを構成する.
+  対応する正規制約のない$x_i$については$x_i \in \mathcal{D}^*$であるものとして考える.
+  このSFAは正規制約を満たす$w_0, \ldots, w_{n - 1}$をセパレーターで連接した文字列を受理することに注意する.
+
+  これによって直線制約が$\bigwedge_{m \leq i \le n} \varphi_i$であるとき
+  $n - m$個のSSTと1個のSFAが得られる. \\
+  {\bf step\ref{step_2}}
+
+  step\ref{step_1}で生成された$x_i$に対応するSSTは$x_0, \ldots, x_{i - 1}$までを入力として受け取り,
+  それらにより得られる$x_i$を末尾に追加して出力する.
+  $S_{n - 1}$によってSFAの逆像を取ると, 得られたSFAは正規制約を満たす
+  $w_0, \ldots, w_{n - 2}$をセパレーターで連接した文字列を受理する.
+  同様にして得られた, 正規制約満たす$w_0, \ldots, w_i$をセパレーターで連接した文字列を受理するSFAを順に
+  $S_i$で逆像を取る.  \\
+  {\bf step\ref{step_3}}
+
+  step\ref{step_2}で最終的に$0 < m$であれば正規制約満たす$w_0 \# \ldots \# w_{m - 1}$を,
+  $m = 0$であれば$\varepsilon$を受理するSFAか, $\emptyset$のSFAが得られる.
+  得られたSFAの空性を調べることで充足可能性を判定することができ, 空でない場合は
+  受理されるパスを取ってくることで解の一つを得ることができる.
+\end{document}

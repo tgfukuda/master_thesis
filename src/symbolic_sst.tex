@@ -1,0 +1,202 @@
+\documentclass[uplatex,dvipdfmx,a4j]{jsreport}
+\usepackage{thesis}
+
+\begin{document}
+  \chapter{Symbolic SST}  \label{chap:symbolic_sst}
+  本研究では後に説明するように文字列制約をAlurらによるStreaming String TransducerをSymbolicに
+  拡張したものとSymbolic Automatonを用いて表し, AutomatonのSSTによる逆像を取ることで充足可能性判定
+  を行う. 以下のようにSymbolic SSTを定義する.
+
+  \begin{definition}[Symbolic SST]
+
+    Symbolic SST$S$を六組$\lrangle{\mathcal{A}, X, Q, q_0, f, \Delta}$で定義する.
+    \begin{itemize}
+      \item $\mathcal{A}$: Boolean Algebra
+      \item $X$: 文字列変数
+      \item $Q$: 状態
+      \item $q_0$: 初期状態
+      \item $F \subseteq Q \rightarrow (\mathcal{D} \cup X)^*$: 受理関数
+      \item $\Delta \subseteq Q \times \Psi \times
+      Q \times (X \rightarrow (\Lambda \cup X)^*)$: 遷移関係
+    \end{itemize}
+    出力される関数$\alpha \subseteq X \rightarrow (\Lambda \cup X)^*$
+    を, function term$\lambda$に対しては$\alpha(\lambda) = \lambda$となるよう自然に拡張された関数
+    $\alpha \subseteq (\Lambda \cup X)^* \rightarrow (\Lambda \cup X)^*$
+    として考える.
+
+    $\Lambda_k \defeq \Lambda \times k, \Lambda \simeq \Lambda \times 1$とする.
+    演算$\uparrow$を$(\lambda, i)^\uparrow = (\lambda, i + 1)$と定義し,
+    $\forall x \in X.\ x^\uparrow = x$として
+    $\uparrow \subseteq
+    (\Lambda_{[k]} \cup X)^* \rightarrow (\Lambda_{[k + 1]} \cup X)^*$
+    に拡張する.
+    ここで$\Lambda_{[k]} = \bigcup_{i \in \{ 1, \ldots, k \}} \Lambda_i$.
+
+    同様に$\forall d \in \mathcal{D}.\ d^\uparrow = d$により
+    $(X \cup \mathcal{D})^* \rightarrow (X \cup \mathcal{D})^*$に対しても拡張する.
+    この関数によってSymbolic SSTの関数適用を
+    $\forall h \in (\Lambda^{[k]} \times X)^*.\ \alpha(h) = \alpha(h^\uparrow)$
+    と意味付ける.
+    $\alpha = \alpha_1 \circ \cdots \circ \alpha_n$
+    は$w = a_1 \cdots a_n$に対して
+    $\alpha(z)$中の$(\lambda, i)$の出現を$\lambda(a_i)$で置換することで
+    $\alpha_w \in X \rightarrow (\mathcal{D} \cup X)^*$に簡約される.
+
+    $\Psi_{[k]} \in \Psi^{\{ 1, \ldots, k \}}$として,
+    $\psi \in \Psi_{[k]}$に対して$\psi_i = \psi(i)$と書く事にする.
+
+    $\phi \in \Psi_{[n]}$は長さ$n$の文字列$w = a_1 \ldots a_n$
+    が$\bigwedge_{[n]} \phi_i(a_i)$を
+    真にするとき$w \in \seman{\phi}$と意味付ける.
+    $\Psi^{[k]}$に対して$\land, \lor, \lnot$を$i \in \{ 1, \ldots, k \}$
+    \begin{align*}
+      \varphi \land \psi (i) &= \varphi(i) \land \psi(i) \\
+      \varphi \lor \psi (i) &= \varphi(i) \lor \psi(i) \\
+      \lnot \psi (i) &= \lnot \psi(i)
+    \end{align*}
+    と定義し, $\Rightarrow$を
+    $\varphi \Rightarrow \psi = (\lnot \varphi \lor \psi)$とする.
+    また, $\uparrow \subseteq \Psi^{[k]} \rightarrow \Psi^{[k + 1]}$を
+    \[
+      \varphi^\uparrow(i) =
+        \begin{cases}
+          \top \quad &\mbox{if} \quad i = 1 \\
+          \varphi(i - 1) \quad &\mbox{otherwise}
+        \end{cases}
+    \]
+    と定義する.
+
+    略記方として特に$\phi(i) = \varphi$かつ$j (\neq i)$に対して$\phi(j) = \top$
+    であるような$\phi \in \Psi^{[k]}$を$[\varphi]_i$と書き, そのような論理式の集合を$\Psi_k$とする.
+
+    $\Delta$は次のような関数である.
+    \[
+      q \transarrow{\varphi / \alpha}{} q'
+    \]
+    ここで$\alpha$は
+    \begin{align*}
+      x &= \kappa_{1, x} \kappa_{2, x} \ldots \kappa_{n_x, x} \\
+      y &= \kappa_{1, y} \kappa_{2, y} \ldots \kappa_{n_y, y} \\
+      \vdots &
+    \end{align*}
+    それぞれの$\kappa_{i, x}$はfunction term または文字列変数である.
+
+    $a \in \mathcal{D}$と$S$の遷移に対して, $q \transarrow{\varphi / \alpha}{} q'$
+    かつ$a \in \seman{\varphi}$であるとき, $q \transarrow{a / \alpha}{} q'$とする.
+
+    再帰的に, $q_0, q_1, \ldots, q_n, w = a_1 a_2 \ldots a_n$に対して,
+    $q_0 \transarrow{\varphi_1 / \alpha_1}{} q_1 \transarrow{\varphi_2 / \alpha_2}{}
+    \cdots \transarrow{\varphi_n / \alpha_n}{} q_n$
+    かつ
+    $w \in \seman{\varphi_1 \land \cdots \land \varphi_n^{(\uparrow)^{n - 1}}}$
+    であるとき
+    $q_0 \transarrow{w / \alpha_w}{} q_n$とする.
+
+    $S$の言語を
+    $\mathcal{L}(S) =
+    \{ (w, w') \in (\mathcal{D}^*)^2 \mid
+    q_0 \transarrow{w / \alpha_w}{} q \land
+    q \in \mbox{dom}(F) \land
+    \hat{\varepsilon}(\alpha_w(F(q))) = w' \}$とする.
+
+    ここで$\hat{\varepsilon}$は文字列変数を$\varepsilon$で置き換える関数である.
+  \end{definition}
+
+  \begin{definition}[Bounded Copy]
+    更新関数$\alpha$と$x \in X$に対して$Var(\alpha(x))$を$\alpha(x)$に含まれる変数の数とする.
+
+    Symbolic SST$S = \lrangle{\mathcal{A}, X, Q, q_0, f, \Delta}$が
+    \[
+      \underset{w \in \mathcal{A}^*}{\mbox{max}}
+        \underset{x \in X, q_0 \transarrow{w / \alpha_w}{} q}{\mbox{max}} Var(\alpha(x)) = k
+    \]
+    を満たすとき$k$-bounded copyであるという. 特に$k = 1$であるときcopylessという.
+  \end{definition}
+
+  \begin{example}
+    以下のSymbolic SSTは任意の文字列$w$に対して$ww^R$を出力する.
+    ただし, $w^R$は$w$を反転させた文字列とする.
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        %nodes
+        \node[state, initial, accepting] at (0, 0) (p) {$p$};
+        %output function
+        \node[below = 1 of p] {$F(p) = x \cdot y$};
+        %arrows
+        \draw [->]
+          (p) edge[loop above] node{
+          $\top /
+          \left[
+            \begin{aligned}
+              x &= x \cdot \id \\
+              y &= \id \cdot y
+            \end{aligned}
+          \right]$
+          } (p)
+        ;
+      \end{tikzpicture}
+    \end{center}
+    このSymbolic SSTはcopylessである.
+  \end{example}
+
+  \begin{example}
+    以下のSymbolic SSTは入力の, $"(a \cup b)^*c"$で表されるマッチを$"d"$で置き換えた文字列を
+    出力する.
+    $\varphi_{a,b}(\sigma) = (\sigma = a \lor \sigma = b)$,
+    $\varphi_c(\sigma) = (\sigma = d)$,
+      \begin{align*}
+        f &= \left[
+          \begin{aligned}
+            x &= x \cdot \id  \\
+            y &= x \cdot \id
+          \end{aligned}
+        \right] \\
+        f' &= \left[
+          \begin{aligned}
+            x &= x \cdot \id  \\
+            y &= y
+          \end{aligned}
+        \right] \\
+        g &= \left[
+          \begin{aligned}
+            x &= y \cdot "d" \cdot  \id \\
+            y &= y \cdot "d"
+          \end{aligned}
+        \right] \\
+        g' &= \left[
+          \begin{aligned}
+            x &= y \cdot "d" \cdot  \id \\
+            y &= y \cdot "d" \cdot  \id
+          \end{aligned}
+        \right]
+      \end{align*}
+    とする.
+
+    出力関数は
+    \begin{align*}
+      F(p) &= x \\
+      F(q) &= x \\
+      F(r) &= y \cdot "d"
+    \end{align*}
+    である.
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        %nodes
+        \node[state, initial, accepting] at (-3, 0) (p) {$p$};
+        \node[state, accepting] at (3, 5) (q) {$q$};
+        \node[state, accepting] at (3, -5) (r) {$r$};
+        %arrows
+        \draw [->]
+          (p) edge[loop above] node[left=0.1] {$\lnot \varphi_{a,b} / f$} ()
+              edge[bend left] node[above=0.5] {$\varphi_{a,b} / f'$} (q)
+          (q) edge[loop above] node [above] {$\varphi_{a,b} / f'$} ()
+              edge[bend left] node[left=0.2] {$\lnot (\varphi_{a,b} \land \varphi_{c}) / f$} (p)
+              edge[bend right=13] node[left=0.3] {$\varphi_{c} / f'$} (r)
+          (r) edge[bend right] node[below right] {$\varphi_{a,b} / g$} (q)
+              edge[bend left] node[below left=0.5] {$\lnot \varphi_{a,b} / g'$} (p)
+        ;
+      \end{tikzpicture}
+    \end{center}
+    上記Symbolic SSTはcopylessである.
+  \end{example}
+\end{document}

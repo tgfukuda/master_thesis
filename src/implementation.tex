@@ -1,0 +1,194 @@
+\documentclass[uplatex,dvipdfmx,a4j]{jsreport}
+\usepackage{thesis}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\smallitshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip=-0.5ex
+}
+
+\begin{document}
+  \chapter{実装}  \label{chap:implementation}
+
+  \ref{chap:solve}章, \ref{chap:symbolic_preimage}章の実装をRustで行った.
+  smt2(\url{https://smtlib.cs.uiowa.edu/})の形式で入力ファイルを受け取り, 実行を行う.
+  実際のコードは\url{https://github.com/tgfukuda/solver_with_symbolic}で確認することができる.
+
+  \section{モデルの実装}
+
+  \subsection{smt2形式からの変換}
+  smt2からの変換にはクレート smt2parser v0.6.1を使用した.
+  本クレートではsmt2ファイルからastへの変換を行い, structとして提供してくれる.
+
+  \subsection{ドメイン}
+  boolean algebraのドメインは以下のようなtraitで実装した.
+  \begin{lstlisting}[caption=Domain, label=domain_impl]
+  pub trait Domain: Debug + Eq + Ord + Clone + Hash + From<char> + Into<char> {
+    fn separator() -> Self;
+  }
+  \end{lstlisting}
+  charからの変換が必要なため上記のような実装となる.
+
+  \subsection{boolean algebra, function term}
+  boolean algebraの定義と共にEquality algebraを含む述語集合を前提としたため,
+  以下のような実装になっていることに加え, function termとの合成と
+  あるドメインが論理式を満たすかを調べるためのメソッドを含む.
+  \begin{lstlisting}[caption={boolean algebra}, label=bool_alg_impl]
+  pub trait BoolAlg: Debug + Eq + Hash + Clone {
+    type Domain: Domain;
+    type Term: FunctionTerm<Domain = Self::Domain>;
+    type GetOne: Domain;
+
+    /**
+     * predicate that means x == a.
+     * it names `char` because
+     * `eq` is already defined in trait PartialEq
+     * and the name like it is confusing.
+     */
+    fn char(a: Self::Domain) -> Self;
+    fn and(&self, other: &Self) -> Self;
+    fn or(&self, other: &Self) -> Self;
+    fn not(&self) -> Self;
+    fn top() -> Self;
+    fn bot() -> Self;
+    fn with_lambda(&self, f: &Self::Term) -> Self;
+
+    fn all_char() -> Self {
+      Self::char(Self::Domain::separator()).not()
+    }
+
+    fn boolean(b: bool) -> Self {
+      if b {
+        Self::top()
+      } else {
+        Self::bot()
+      }
+    }
+
+    fn separator() -> Self {
+      Self::char(Self::Domain::separator())
+    }
+
+    /** apply argument to self and return the result */
+    fn denote(&self, arg: &Self::Domain) -> bool;
+
+    fn satisfiable(&self) -> bool;
+
+    fn get_one(&self) -> Result<Self::GetOne, NoElement>;
+  }
+  \end{lstlisting}
+
+  function termも同様に以下のtraitで実装している. 基本的なtermの生成と適用, compositionが含まれる.
+  \begin{lstlisting}[caption={function term}, label=function_term_impl]
+  pub trait FunctionTerm: Debug + Eq + Hash + Clone {
+    type Domain: Domain;
+
+    fn identity() -> Self;
+
+    fn constant(a: Self::Domain) -> Self;
+
+    fn separator() -> Self {
+      Self::constant(Self::Domain::separator())
+    }
+
+    fn apply<'a>(&'a self, arg: &'a Self::Domain) -> &'a Self::Domain;
+
+    /** functional composition of self (other (x)) */
+    fn compose(self, other: Self) -> Self;
+  }
+  \end{lstlisting}
+
+  \subsection{SFA, SST}
+  SFA, SST, Transducerは共通の処理を実装するtrait
+  (入力に対する実行や1ステップの動作, 必要のない状態を排除するメソッド等)が別にあるが,
+  以下のstructで実装してある. シンプルな実装にするため定義外のフィールドは含まない.
+
+  SFAではpreimageに加えて, intersection, concat, or等の基本的な実装がされている.
+  \begin{lstlisting}[caption=SFA, label=sfa_impl]
+    type Source<S, B> = (S, B);
+    type Target<S> = Vec<S>;
+    /**
+    * symbolic automata
+    * each operation like concat, or, ... corresponds to regex's one.
+    */
+    #[derive(Debug, PartialEq, Clone)]
+    pub struct SymFa<D, B, S>
+    where
+      D: Domain,
+      B: BoolAlg<Domain = D>,
+      S: State,
+    {
+      states: HashSet<S>,
+      initial_state: S,
+      final_states: HashSet<S>,
+      transition: HashMap<Source<S, B>, Target<S>>,
+    }
+  \end{lstlisting}
+
+  SSTの実装においてHashMapを更新関数で利用しており, BTreeMapを利用する方法もあるが,
+  HashMapにHashが実装されないため非決定的な遷移にVec(BTreeSetでも良い)を使用している.
+  二つのSSTの遷移をmergeするためのメソッドとソルバで使用する形式のSSTを作成するためのメソッドが存在する.
+  structとは別に入力文字列$w$に対して$w$, $w^R$,
+  $\mbox{replace}(\mbox{from}, \mbox{to})$, $\mbox{replace\_all}(\mbox{from}, \mbox{to})$,
+  $\mbox{constant}(w')$を出力するSSTを生成する関数と原子制約からSSTに変換する関数が存在する.
+  \begin{lstlisting}[caption=SST, label=sst_impl]
+    type UpdateFunction<F, V> = HashMap<V, Vec<UpdateComp<F, V>>>;
+    type Source<B, S> = (S, B);
+    type Target<F, S, V> = (S, UpdateFunction<F, V>);
+    type Output<D, V> = Vec<OutputComp<D, V>>;
+    type Transition<B, F, S, V> = HashMap<Source<B, S>, Vec<Target<F, S, V>>>;
+
+    /** implementation of symbolic streaming string transducer (SSST) */
+    #[derive(Debug, PartialEq, Clone)]
+    pub struct SymSst<D, B, F, S, V>
+    where
+      D: Domain,
+      B: BoolAlg<Domain = D>,
+      F: FunctionTerm<Domain = D>,
+      S: State,
+      V: Variable,
+    {
+      states: HashSet<S>,
+      variables: HashSet<V>,
+      initial_state: S,
+      output_function: HashMap<S, Output<D, V>>,
+      /**
+       * if a next transition has no correponding sequence
+       * for some variable, update with identity
+       * i.e. update(var) = vec![UpdateComp::X(var)]
+       */
+      transition: Transition<B, F, S, V>,
+    }
+  \end{lstlisting}
+
+  \section{逆像の計算}
+
+  実際の逆像計算では全ての状態を計算することはせず, 必要な部分のみに限って構成する.
+  Symbolic SST$\lrangle{\mathcal{A}, X, Q, q_0, F_S, \Delta}$とするとき,
+  初期状態$Q'$を$q_f \in \dom(F_S)$に対して$F_S(q_f)$でSFAを動作させ受理された集合とする.
+  この際SFAの動作に関してもバックトラックで可能性を列挙していき, 動作を調べる.
+
+  $Q'$の状態に対して\ref{chap:symbolic_preimage}章の手続きでその状態への遷移を追加し,
+  新たに現れた状態に対して再帰的に計算していく. つまり, SSTの遷移の探索, SFAの探索の双方に
+  関してバックトラックで計算を行っていく. この計算に関しては到達しうる状態を調べていく方法,
+  すなわち各ステップを通常の動作と同様の方法で計算していく方法でも同じSFAが構成できるが, 実行時間に大きな差が出たため
+  この方法を採用している.
+
+  \begin{example}
+
+  \end{example}
+
+\end{document}

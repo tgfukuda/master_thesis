@@ -1,0 +1,312 @@
+\documentclass[uplatex,dvipdfmx,a4j]{jsreport}
+\usepackage{thesis}
+
+\begin{document}
+  \chapter{準備}  \label{chap:preliminalies}
+
+  \section{文字列制約}
+
+  初めに, 本論文で扱う対象である文字列制約を定義する.
+  文字列の長さの半線形集合による制約(整数制約)を含む定義も存在するが,
+  本論文ではそのような長さに関する制約は考えず, 文字列変数のトランスダクションと正規言語による制約
+  を考える.
+
+  \begin{definition}[基礎直線制約]
+    $x_0, x_1, \ldots, x_{n - 1}$を文字列変数, $\Sigma$をアルファベットとする.
+    $j, k < i$, $T$: トランスダクション, $w \in \Sigma^*$とする.
+    $x_i$に関する原子制約$\varphi_i$を
+    \[
+      \varphi \defeq w \mid x_j \mid x_j \cdot x_k \mid T(x_j)
+    \]
+    と定義する.
+    $m < n$, $\varphi_i (m \leq i < n)$を原子制約とするとき,
+    基礎直線制約$\varphi_{sl}$を
+    \[
+      \varphi_{sl} \defeq \bigwedge_{m \leq i < n} \varphi_i
+    \]
+    で定義する.
+  \end{definition}
+
+  \begin{definition}[正規制約]
+    $x_0, x_1, \ldots, x_{n - 1}$を文字列変数, $R_i (0 \leq i \le n)$を正規言語とする.
+    正規制約$\varphi_{reg}$を
+    \[
+      \varphi_{reg} \defeq \bigwedge_{0 \leq i < n} x_i \in R_i
+    \]
+    で定義する
+  \end{definition}
+
+  \begin{definition}[文字列制約]
+    直線文字列制約$\varphi$を
+    \[
+      \varphi \defeq \varphi_{sl} \land \varphi_{reg}
+    \]
+    で定義する.
+  \end{definition}
+
+  $w$を文字列, $x$を文字列変数として変数の割り当て$\theta$を
+  \begin{align*}
+    \theta(w) &= w \\
+    \theta(x_i \cdot x_j) &= \theta(x_i) \cdot \theta(x_j)  \\
+    \theta(T(x)) &= T(\theta(x))  \\
+    \theta(x \in R) &\Leftrightarrow \theta(x) \in R
+  \end{align*}
+  と拡張する.
+  直線文字列制約$\varphi$は真となる割り当て$\theta$が存在するとき, 充足可能であるという.
+
+  直線制約に帰着可能な制約は充足可能性が決定可能であることが示されている.
+  (\cite{lin2016string}, Theorem 5)
+  本論文では直線文字列制約のみを考え, 特に注釈のない文字列制約とした時は直線文字列制約を指すものとする.
+
+  \begin{example}
+    本論文では文字列変数$x$に対して代表的なトランスダクションとして
+    $x.rev()$により$x$の反転, $x.replace(R, w)$により正規表現$R$で最初にマッチする部分の$w$による置換,
+    $x.replace(R, w)$で全ての置換を表す.
+
+    文字列変数を$x_0, x_1, x_2, x_3$とするとき, 以下は直線文字列制約となる.
+    \begin{align*}
+      x_1 &= x_0 \cdot "a"  \\
+      x_2 &= x_1 \cdot x_1.reverse()  \\
+      x_3 &= x_2.replace("cbaabc", "xyz") \\
+      x_3 &\in "xyz"
+    \end{align*}
+
+    $\theta$を
+    \begin{align*}
+      x_0 &= "cb" \\
+      x_1 &= "cba"  \\
+      x_2 &= "cbaabc" \\
+      x_3 &= "xyz"
+    \end{align*}
+    とすると上記制約を満たすため, 充足可能である.
+  \end{example}
+
+  \section{Symbolic Automata}
+
+  直線制約を解析するための道具の一つとしてSymbolic Automatonを導入する.
+  通常のオートマトンが各遷移のラベルとして文字を利用するのに対して,
+  Symbolic Automatonは以下のEffective Boolean Algebraを用いて遷移のラベルを表す.
+
+  \begin{definition}[Effective Boolean Algebra]
+    Effective Boolean Algebra $\mathcal{A}$ は以下の8つ組で表される.
+    \[
+      \lrangle{\mathcal{D}, \Psi, \seman{\_}, \top, \bot, \lor, \land, \lnot}
+    \]
+    \begin{itemize}
+      \item $\mathcal{D}$: ドメイン
+      \item $\Psi$: 述語全体の集合
+      \item $\seman{\_} \in \Psi \rightarrow 2^{\mathcal{D}}$: 論理式を満たす集合
+    \end{itemize}
+    とする.
+    $\top, \bot \in \Psi$は$\seman{\top} = \mathcal{D}, \seman{\bot} = \emptyset$なる要素で,
+    $\varphi, \psi \in Psi$に対して
+    $\seman{\varphi \land \psi} = \seman{\varphi} \cap \seman{\psi},
+    \seman{\varphi \lor \psi} = \seman{\varphi} \cup \seman{\psi},
+    \seman{\lnot \varphi} = \mathcal{D} - \seman{\varphi}$である.
+  \end{definition}
+
+  以上に加えて, effective boolean algebraはその充足可能性が決定可能であるものとする.
+  \begin{example}[Equality Algebra]
+    $\mathcal{D}$に対して$a \in \mathcal{D}, \varphi_a = \{ a \}$と$\top, \bot$,
+    それらの論理閉包で表される集合を$\Psi$とするとeffective boolean algebraになる.
+  \end{example}
+
+  Symbolic Finite Automata(SFA)を以下のように定義する
+
+  \begin{definition}[Symbolic Finite Automata]
+
+    SFA$A$を五組$\lrangle{\mathcal{A}, Q, q_0, F, \delta}$により定義する.
+    \begin{itemize}
+      \item $\mathcal{A}$: Boolean Algebra
+      \item $Q$: 状態
+      \item $q_0$: 初期状態
+      \item $F$: 受理状態
+      \item $\delta \subseteq Q \times \Psi \times Q$: 遷移関係
+    \end{itemize}
+
+    $\delta$は次のような形となる.
+    \[
+      q \transarrow{\phi}{} q'
+    \]
+  \end{definition}
+
+  $a \in \mathcal{D}$と$A$の遷移に対して, $q \transarrow{\phi}{} q'$
+  かつ$a \in \seman{\phi}$であるとき, $q \transarrow{a}{} q'$とする. \\
+  再帰的に, $q_0, q_1, \ldots, q_n, w = a_1 a_2 \ldots a_n$に対して,
+  $q_0 \transarrow{\phi_1}{} q_1 \transarrow{\phi_2}{}
+  \cdots \transarrow{\phi_n}{} q_n$
+  かつ$a_1 \in \seman{\phi_1}, a_2 \in \seman{\phi_2},
+  \ldots, a_n \in \seman{\phi_n}$であるとき
+  $q_0 \transarrow{w}{} q_n$とする. \\
+  また, このようなパスがあるとき
+  $q_0 \transarrow{[\phi_1, \ldots, \phi_n]}{} q_n$と書くことにする. \\
+  $\mbox{dom}(q) = \bigvee\{\phi \mid \exists q' \in Q. q \transarrow{\phi}{} q'\}$とする. \\
+  $A$の言語を
+  $\mathcal{L}(A) =
+  \{ w \in \mathcal{D}^* \mid q_0 \transarrow{w}{} q \land q \in F \}$
+  とする.
+
+  SFA$A$が決定的であるとは,
+  任意の$q \in Q$で
+  $q \transarrow{\varphi_1}{} q_1 \in \delta, q \transarrow{\varphi_2}{} q_2 \in \delta$
+  であるとき, $\seman{\varphi_1 \land \varphi_2} = \emptyset$であることをいう.
+
+  通常のオートマトンは, 遷移のラベルをEquality Algebraに置換することで
+  SFAに変換することができる.
+  一方, 論理式のMintermを用いてSFAを有限語上のDFAに変換することでDFAのアルゴリズムを適用することはできるが,
+  そのComplexityに関してはアルファベット上の演算による分の考慮が必要で異なる部分もある.
+  サブセット構成等, ラベル部分に関して修正を行うことでほとんど同様に適用できるものもあり,
+  任意のSFAを決定的に変換できることや空性判定, 和集合や積集合, 補集合に関して閉じていることなどは同じである.
+
+  \begin{example}
+    以下のSFAは$a$から始まる文字列を受理する.
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        %nodes
+        \node[state,initial] at (0, 0)    (p0) {$p_0$};
+        \node[state,accepting] at (2, 1)  (p1) {$p_1$};
+        \node[state] at (2, -1)           (p2) {$p_2$};
+        %arrows
+        \draw [->]
+          (p0) edge[bend left,above] node{$a$} (p1)
+          (p0) edge[bend right,below] node{$\lnot a$} (p2)
+          (p1) edge[loop above] node{$\top$} (p1)
+          (p2) edge[loop below] node{$\top$} (p2)
+        ;
+      \end{tikzpicture}
+    \end{center}
+  \end{example}
+
+  \begin{example}
+    以下のSFAは奇数番目が奇数, 偶数番目が偶数である文字列を受理する.
+    ただし, $\mathcal{D} = \{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 \}$,
+    $\varphi_{odd}(i) = (i\ mod\ 2 = 1)$, $\varphi_{even}(i) = (i\ mod\ 2 = 0)$とする.
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        %nodes
+        \node[state,initial,accepting] at (0, 0)    (p0) {$p_0$};
+        \node[state,accepting] at (3, 0)             (p1) {$p_1$};
+        %arrows
+        \draw [->]
+          (p0) edge[bend left,above] node{$\varphi_{odd}$} (p1)
+          (p1) edge[bend left,below] node{$\varphi_{even}$} (p0)
+        ;
+      \end{tikzpicture}
+    \end{center}
+  \end{example}
+
+  Symbolic Automatonと同様にSymbolic Transducerを考えることもできるが,
+  更新関数は元の文字に関する関数の適用により表され,　以下のfunction termを用いる.
+
+  \section{Function Term}
+
+  \begin{definition}[Function Term]
+    $\lambda: \mathcal{D} \rightarrow \mathcal{D}$をfunction termという. \\
+    function termの集合を$\Lambda$で表す.
+  \end{definition}Function Term
+
+  例えば, 任意の$a \in \mathcal{D}$に対して, $\id(a) = a$なる恒等関数$\id$や
+  $c \in \mathcal{D}$として,
+  任意の$a \in \mathcal{D}$に対して, $c(a) = c$となる定数関数$c$はfunction termである.
+  function term上の合成$\circ$を$\lambda_1, \lambda_2 \in \Lambda$に対して
+  \[
+    \lambda_1 \circ \lambda_2 (a) = \lambda_1(\lambda_2(a))
+  \]
+  と定義する.
+  同様に$\psi \in \Psi$と$\lambda \in \Lambda$に対して$\psi(\lambda) \in \Psi$を
+  \[
+    \psi(\lambda)(a) = \psi(\lambda(a))
+  \]
+  と定義する.
+
+  $\Lambda$は文字から文字への関数であり, 文字から文字列への関数ではないことに注意する.
+
+  本研究のソルバではSymbolicなモデルを用いて計算を行うため,
+  文字列はeffective boolean algebraのドメイン$\mathcal{D}$によって$\mathcal{D}^*$と表される.
+
+  \section{Streaming String Transducer}
+
+  Streaming String Transducer(SST)\cite{alur2011streaming}はAlurらにより提案された
+  トランスダクションを表すモデルであり,
+  MSO Transducer, Two way Transducer\cite{engelfriet2001mso}と等価な表現力を持つことが示されている
+  \cite{alur_et_al:LIPIcs:2010:2853}.
+
+  \begin{definition}[SST] \label{def: SST}
+    (deterministic) Streaming String Transducer $S$を
+    $\lrangle{\Sigma, \Gamma, Q, X, \delta, \eta, q_0, F}$で定義する.
+    $\Sigma$は入力文字列, $\Gamma$は出力文字列, $Q$を状態の集合, $X$は文字列変数の集合, $q_0$は開始状態である.
+    $\delta \subseteq Q \times \Sigma \rightarrow Q$は遷移関数,
+    $\eta \subseteq Q \times \Sigma \rightarrow M_{X, \Gamma}$は変数更新関数である.
+    $F \subseteq Q \hookrightarrow (X \cup \Gamma)^*$は出力関数で, 受理状態に対して出力文字列を返す.
+    ここで, $M_{X, \Gamma}$は変数$x \in X$に対して$X$と$\Gamma$の文字列を返す関数
+    $\alpha: X \rightarrow (X \cup \Gamma)^*$の集合である.
+    SSTの意味$\seman{S}$を以下のように定義する.
+    $q_0 \overset{w / \alpha}{\longrightarrow} q_f,\ q_f \in dom(F)$のとき、
+    \[
+    \seman{S}(w) = \hat{\varepsilon}(\alpha (F(q_f)))
+    \]
+    ここで、$\hat{\varepsilon} \in (\Gamma \cup X)^* \to \Gamma ^*$は変数を空文字列で置き換える関数である.
+
+    $\alpha \in M_{X, \Gamma}$に対し,
+    $\underset{x \in X}{max} |\alpha|_x \leq k (k \in \mathbb{N})$であるとき,
+    $\alpha$は$k$-copyであるという. \\
+    $\hat{\eta}$を$\hat{\eta}(q, w) =
+    \begin{cases}
+      \mathbb{1}_{X, \Gamma}(x) & (w = \epsilon) \\
+      \eta(q, \sigma) \circ \hat{\eta}(\delta(q, \sigma), w') & (w = \sigma w')
+    \end{cases}
+    $
+    として, 文字列に対して変数更新関数を返すよう$\eta$を拡張したものとする.
+    任意の文字列$w \in \Sigma^*$に対し, $\hat{\eta}(q_0, w)$が$k$-copyであるとき,
+    SST$S$は$k$-bounded copyであるという.
+  \end{definition}
+
+  以下は入力$w_0 \# w_1$に対し$w_1w_0$を出力するSSTの$ab \# ba$での動作である.
+  動作のわかりやすさのため, 状態, 文字列変数の中身を$\lrangle{q, [x, y]}$の組みで表す.
+
+  \begin{multicols}{2}
+    \begin{tikzpicture}[aut]
+      \node[state,initial]   (q_0)                {$q_0$};
+      \node[state,accepting] (q_1) [right=of q_0] {$q_1$};
+      \path[->]
+      (q_0) edge[loop above] node[above] {
+      $\sigma / \left[
+      \begin{aligned}
+        x &\mapsto x \sigma \\
+        y &\mapsto y
+      \end{aligned}
+      \right]$
+      } ()
+      (q_1) edge[loop above] node[above] {
+      $\sigma / \left[
+      \begin{aligned}
+        x &\mapsto x \\
+        y &\mapsto y \sigma
+      \end{aligned}
+      \right]$
+      } ()
+      (q_0) edge[right] node[below] {
+      $\# / \left[
+      \begin{aligned}
+        x &\mapsto x \\
+        y &\mapsto y
+      \end{aligned}
+      \right]$
+      } (q_1);
+      \node[below = 1.7 of q_1] {$F(q_1) = yx$};
+    \end{tikzpicture}
+
+    \columnbreak
+
+    \begin{itemize}
+      \item $\lrangle{q, [x, y]} = \lrangle{q_0, [\varepsilon, \varepsilon]}$から開始.
+      \item $\lrangle{q_0, [\varepsilon, \varepsilon]} \overset{a}{\rightarrow}
+      \lrangle{q_0, [a, \varepsilon]}$
+      \item $\lrangle{q_0, [a, \varepsilon]} \overset{b}{\rightarrow} \lrangle{q_0, [ab, \varepsilon]}$
+      \item $\lrangle{q_0, [ab, \varepsilon]} \overset{\#}{\rightarrow} \lrangle{q_1, [ab, \varepsilon]}$
+      \item $\lrangle{q_1, [ab, \varepsilon]} \overset{b}{\rightarrow} \lrangle{q_1, [ab, b]}$
+      \item $\lrangle{q_1, [ab, b]} \overset{a}{\rightarrow} \lrangle{q_1, [ab, ba]}$
+      \item $F(q_1) = yx$であるから出力は$baab$となる.
+    \end{itemize}
+  \end{multicols}
+\end{document}

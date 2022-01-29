@@ -1,0 +1,28 @@
+\ProvidesPackage{title}
+
+\newcommand{\studentid}[1]{\newcommand{\@studentid}{#1}}
+\newcommand{\department}[1]{\newcommand{\@department}{#1}}
+\newcommand{\supervisor}[1]{\newcommand{\@supervisor}{#1}}
+\newcommand{\degree}[1]{\newcommand{\@degree}{#1}}
+\newcommand{\schoolyear}[1]{\newcommand{\@schoolyear}{#1}}
+
+\renewcommand{\maketitle}{%
+  \begin{titlepage}
+    \begin{center}
+      \vspace*{\fill}
+      {\Huge \@title}\\
+      \vspace{4\baselineskip}
+      {\LARGE \@department}\\
+      \vspace{0.5\baselineskip}
+      {\LARGE 学籍番号 \@studentid}\\
+      \vspace{0.5\baselineskip}
+      {\huge \@author}\\
+      \vspace{2\baselineskip}
+      {\LARGE 指導教員 \@supervisor}\\
+      \vspace{4\baselineskip}
+      {\LARGE \@schoolyear} \\
+      {\LARGE \@degree 論文}
+      \vspace*{\fill}
+    \end{center}
+  \end{titlepage}%
+}

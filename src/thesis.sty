@@ -1,0 +1,52 @@
+\ProvidesPackage{thesis}
+
+\usepackage{docmute}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bbold}
+\usepackage{mathtools}
+\usepackage{comment}
+\usepackage{otf}
+\usepackage[]{multicol}
+\usepackage{tikz}
+\usepackage{mathrsfs}
+\usepackage{here}
+\usepackage{color}
+\usepackage{listings}
+\usetikzlibrary{positioning,intersections,calc,automata}
+\tikzset{aut/.style={shorten >=1pt,node distance=4cm,initial text=,on grid,auto}}
+
+\usepackage{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{% hyperrefオプションリスト
+setpagesize=false,%
+bookmarksnumbered=true,%
+bookmarksopen=true,%
+colorlinks=true,%
+linkcolor=blue,%
+citecolor=red,%
+}
+
+\theoremstyle{definition}
+\newtheorem{lemma}{補題}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem*{theorem*}{定理}
+\newtheorem{definition}{定義}[section] %{definition}[theorem]{定義}でカウンタの流用
+\newtheorem*{definition*}{定義}
+\newtheorem{experiment}{実験}
+\newtheorem{example}{例}
+
+\newcommand{\id}{\mbox{id}}
+\newcommand{\dom}{\mbox{dom}}
+\renewcommand{\proofname}{\bf 証明}
+\renewcommand{\bibname}{参考文献}
+\renewcommand{\vector}[1]{\textbf{#1}}
+\newcommand{\affsp}{\mathbb{F}^\mathbb{K}_d}
+\newcommand{\vbold}[1]{\mbox{\boldmath {#1}}}
+\newcommand{\lrangle}[1]{ {\langle {#1} \rangle} }
+\newcommand{\seman}[1]{ {[ \! [{#1}] \! ]} }
+\newcommand{\transarrow}[2]{\xrightarrow[#2]{#1}}
+\newcommand{\defeq}{\overset{\scriptsize \mbox{def}}{=}}
