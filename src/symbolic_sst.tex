@@ -7,7 +7,7 @@
   拡張したものとSymbolic Automatonを用いて表し, AutomatonのSSTによる逆像を取ることで充足可能性判定
   を行う. 以下のようにSymbolic SSTを定義する.
 
-  \begin{definition}[Symbolic SST]
+  \begin{definition}[Symbolic Streaming String Transducers]
 
     Symbolic SST$S$を六組$\lrangle{\mathcal{A}, X, Q, q_0, f, \Delta}$で定義する.
     \begin{itemize}
@@ -19,18 +19,17 @@
       \item $\Delta \subseteq Q \times \Psi \times
       Q \times (X \rightarrow (\Lambda \cup X)^*)$: 遷移関係
     \end{itemize}
-    出力される関数$\alpha \subseteq X \rightarrow (\Lambda \cup X)^*$
+    出力される関数$\alpha: X \rightarrow (\Lambda \cup X)^*$
     を, function term$\lambda$に対しては$\alpha(\lambda) = \lambda$となるよう自然に拡張された関数
-    $\alpha \subseteq (\Lambda \cup X)^* \rightarrow (\Lambda \cup X)^*$
+    $\alpha: (\Lambda \cup X)^* \rightarrow (\Lambda \cup X)^*$
     として考える.
 
-    $\Lambda_k \defeq \Lambda \times k, \Lambda \simeq \Lambda \times 1$とする.
+    $\Lambda_k \defeq \Lambda \times \{ k \}, \Lambda \simeq \Lambda \times \{ 1 \}$,
+    $\Lambda^{[k]} = \bigcup_{i \in \{ 1, \ldots, k \}} \Lambda_i$とする.
     演算$\uparrow$を$(\lambda, i)^\uparrow = (\lambda, i + 1)$と定義し,
     $\forall x \in X.\ x^\uparrow = x$として
-    $\uparrow \subseteq
-    (\Lambda_{[k]} \cup X)^* \rightarrow (\Lambda_{[k + 1]} \cup X)^*$
+    $\uparrow:(\Lambda_{[k]} \cup X)^* \rightarrow (\Lambda_{[k + 1]} \cup X)^*$
     に拡張する.
-    ここで$\Lambda_{[k]} = \bigcup_{i \in \{ 1, \ldots, k \}} \Lambda_i$.
 
     同様に$\forall d \in \mathcal{D}.\ d^\uparrow = d$により
     $(X \cup \mathcal{D})^* \rightarrow (X \cup \mathcal{D})^*$に対しても拡張する.
@@ -42,13 +41,13 @@
     $\alpha(z)$中の$(\lambda, i)$の出現を$\lambda(a_i)$で置換することで
     $\alpha_w \in X \rightarrow (\mathcal{D} \cup X)^*$に簡約される.
 
-    $\Psi_{[k]} \in \Psi^{\{ 1, \ldots, k \}}$として,
+    $\Psi_{[k]} = \Psi^{\{ 1, \ldots, k \}}$として,
     $\psi \in \Psi_{[k]}$に対して$\psi_i = \psi(i)$と書く事にする.
 
     $\phi \in \Psi_{[n]}$は長さ$n$の文字列$w = a_1 \ldots a_n$
     が$\bigwedge_{[n]} \phi_i(a_i)$を
     真にするとき$w \in \seman{\phi}$と意味付ける.
-    $\Psi^{[k]}$に対して$\land, \lor, \lnot$を$i \in \{ 1, \ldots, k \}$
+    $\Psi_{[k]}$に対して$\land, \lor, \lnot$を$i \in \{ 1, \ldots, k \}$
     \begin{align*}
       \varphi \land \psi (i) &= \varphi(i) \land \psi(i) \\
       \varphi \lor \psi (i) &= \varphi(i) \lor \psi(i) \\
@@ -67,7 +66,7 @@
     と定義する.
 
     略記方として特に$\phi(i) = \varphi$かつ$j (\neq i)$に対して$\phi(j) = \top$
-    であるような$\phi \in \Psi^{[k]}$を$[\varphi]_i$と書き, そのような論理式の集合を$\Psi_k$とする.
+    であるような$\phi \in \Psi^{[k]}$を$[\varphi]_i$と書くことにする.
 
     $\Delta$は次のような関数である.
     \[
@@ -98,8 +97,14 @@
     q_0 \transarrow{w / \alpha_w}{} q \land
     q \in \mbox{dom}(F) \land
     \hat{\varepsilon}(\alpha_w(F(q))) = w' \}$とする.
-
     ここで$\hat{\varepsilon}$は文字列変数を$\varepsilon$で置き換える関数である.
+
+    $q \transarrow{\varphi / \alpha}{} q' \in \delta$かつ
+    $q \transarrow{\varphi' / \alpha'}{} q'' \in \delta$
+    に対して$\seman{\varphi \land \varphi'} = \emptyset$なら
+    $q = q' \land \alpha = \alpha'$であるときSymbolic SST $S$はdeterministicであると定義する.
+    ただし$\forall x \in X.\ \alpha(x) = \alpha'(x)$のとき$\alpha = \alpha'$とする.
+    Symbolic SSTがdeterministicでないときnon-deterministicであると定義する.
   \end{definition}
 
   \begin{definition}[Bounded Copy]
@@ -108,10 +113,12 @@
     Symbolic SST$S = \lrangle{\mathcal{A}, X, Q, q_0, f, \Delta}$が
     \[
       \underset{w \in \mathcal{A}^*}{\mbox{max}}
-        \underset{x \in X, q_0 \transarrow{w / \alpha_w}{} q}{\mbox{max}} Var(\alpha(x)) = k
+        \underset{x \in X, q_0 \transarrow{w / \alpha_w}{} q}{\sum} |Var(\alpha_w(x))| = k
     \]
     を満たすとき$k$-bounded copyであるという. 特に$k = 1$であるときcopylessという.
   \end{definition}
+
+  任意のSSTはEquality Algebraにより等価なSymbolic SSTで表すことができる.
 
   \begin{example}
     以下のSymbolic SSTは任意の文字列$w$に対して$ww^R$を出力する.
@@ -159,18 +166,19 @@
         \right] \\
         g &= \left[
           \begin{aligned}
-            x &= y \cdot "d" \cdot  \id \\
-            y &= y \cdot "d"
+            x &= y \cdot d \cdot  \id \\
+            y &= y \cdot d
           \end{aligned}
         \right] \\
         g' &= \left[
           \begin{aligned}
-            x &= y \cdot "d" \cdot  \id \\
-            y &= y \cdot "d" \cdot  \id
+            x &= y \cdot d \cdot  \id \\
+            y &= y \cdot d \cdot  \id
           \end{aligned}
         \right]
       \end{align*}
     とする.
+    ただし, $d$は任意の文字で$"d"$を出力する恒等関数.
 
     出力関数は
     \begin{align*}
@@ -197,6 +205,7 @@
         ;
       \end{tikzpicture}
     \end{center}
+
     上記Symbolic SSTはcopylessである.
   \end{example}
 \end{document}

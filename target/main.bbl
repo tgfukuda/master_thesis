@@ -30,17 +30,23 @@ Luk{\'{a}}{\v{s}} Hol{\'{i}}k, Petr Jank{\u{u}}, Anthony~W Lin, Philipp
 \newblock {\em Proceedings of the ACM on Programming Languages}, Vol.~2, No.
   POPL, pp. 1--32, 2017.
 
+\bibitem{zhu2019sstsolver}
+Qizhen Zhu, Hitoshi Akama, and Yasuhiko Minamide.
+\newblock Solving string constraints with streaming string transducers.
+\newblock {\em Information Processing}, Vol.~27, pp. 810--821, 2019.
+
+\bibitem{kamano2021solver}
+釜野雅基, 福田大我, 南出靖彦.
+\newblock 非決定性 streaming string transducer と parikh
+  オートマトンを用いた文字列制約の充足可能性判定.
+\newblock 日本ソフトウェア科学会第38回大会, 2021.
+
 \bibitem{alur2013regular}
 Rajeev Alur, Loris DAntoni, Jyotirmoy Deshmukh, Mukund Raghothaman, and Yifei
   Yuan.
 \newblock Regular functions and cost register automata.
 \newblock In {\em 2013 28th Annual ACM/IEEE Symposium on Logic in Computer
   Science}, pp. 13--22. IEEE, 2013.
-
-\bibitem{zhu2019sstsolver}
-Qizhen Zhu, Hitoshi Akama, and Yasuhiko Minamide.
-\newblock Solving string constraints with streaming string transducers.
-\newblock {\em Information Processing}, Vol.~27, pp. 810--821, 2019.
 
 \bibitem{chen2022solving}
 Taolue Chen, Alejandro Flores-Lamas, Matthew Hague, Zhilei Han, Denghang Hu,
@@ -50,18 +56,24 @@ Taolue Chen, Alejandro Flores-Lamas, Matthew Hague, Zhilei Han, Denghang Hu,
 \newblock {\em Proceedings of the ACM on Programming Languages}, Vol.~6, No.
   POPL, pp. 1--31, 2022.
 
-\bibitem{d2017power}
-Loris D'~Antoni and Margus Veanes.
-\newblock The power of symbolic automata and transducers.
-\newblock In {\em International Conference on Computer Aided Verification}, pp.
-  47--67. Springer, 2017.
-
 \bibitem{alur2011streaming}
 Rajeev Alur and Pavol {\v{C}}ern{\'{y}}.
 \newblock Streaming transducers for algorithmic verification of single-pass
   list-processing programs.
 \newblock In {\em Proceedings of the 38th annual ACM SIGPLAN-SIGACT symposium
   on Principles of programming languages}, pp. 599--610, 2011.
+
+\bibitem{cadilhac2012affine}
+Micha{\"e}l Cadilhac, Alain Finkel, and Pierre McKenzie.
+\newblock Affine parikh automata∗.
+\newblock {\em RAIRO-Theoretical Informatics and Applications}, Vol.~46, No.~4,
+  pp. 511--545, 2012.
+
+\bibitem{d2017power}
+Loris D'~Antoni and Margus Veanes.
+\newblock The power of symbolic automata and transducers.
+\newblock In {\em International Conference on Computer Aided Verification}, pp.
+  47--67. Springer, 2017.
 
 \bibitem{engelfriet2001mso}
 Joost Engelfriet and Hendrik~Jan Hoogeboom.
@@ -72,11 +84,17 @@ Joost Engelfriet and Hendrik~Jan Hoogeboom.
 
 \bibitem{alur_et_al:LIPIcs:2010:2853}
 Rajeev Alur and Pavol {\u{C}}ern{\'{y}}.
-\newblock {Expressiveness of streaming string transducers}.
+\newblock Expressiveness of streaming string transducers.
 \newblock In Kamal Lodaya and Meena Mahajan, editors, {\em IARCS Annual
   Conference on Foundations of Software Technology and Theoretical Computer
   Science (FSTTCS 2010)}, Vol.~8 of {\em Leibniz International Proceedings in
   Informatics (LIPIcs)}, pp. 1--12, Dagstuhl, Germany, 2010. Schloss
   Dagstuhl--Leibniz-Zentrum fuer Informatik.
+
+\bibitem{alur2011nondeterministic}
+Rajeev Alur and Jyotirmoy~V Deshmukh.
+\newblock Nondeterministic streaming string transducers.
+\newblock In {\em International Colloquium on Automata, Languages, and
+  Programming}, pp. 1--20. Springer, 2011.
 
 \end{thebibliography}

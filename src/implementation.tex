@@ -66,28 +66,15 @@
     fn bot() -> Self;
     fn with_lambda(&self, f: &Self::Term) -> Self;
 
-    fn all_char() -> Self {
-      Self::char(Self::Domain::separator()).not()
-    }
-
-    fn boolean(b: bool) -> Self {
-      if b {
-        Self::top()
-      } else {
-        Self::bot()
-      }
-    }
-
-    fn separator() -> Self {
-      Self::char(Self::Domain::separator())
-    }
+    :
+    :
 
     /** apply argument to self and return the result */
     fn denote(&self, arg: &Self::Domain) -> bool;
 
     fn satisfiable(&self) -> bool;
 
-    fn get_one(&self) -> Result<Self::GetOne, NoElement>;
+    :
   }
   \end{lstlisting}
 
@@ -187,8 +174,127 @@
   すなわち各ステップを通常の動作と同様の方法で計算していく方法でも同じSFAが構成できるが, 実行時間に大きな差が出たため
   この方法を採用している.
 
-  \begin{example}
+  \section{実験}
 
+  \begin{example}
+    $x_0, x_1, x_2$を文字列変数とする.
+    \begin{align*}
+      x_1 &= x_0.rev() \\
+      x_2 &= x_1.rev()  \\
+      x_1 &\in "ab"  \\
+      x_2 &\in "ba"^+
+    \end{align*}
+
+    \ref{chap:solve}章で生成される最初のSFAは以下.
+    $\varphi_{\#}(\sigma) = (\sigma = \#), \varphi_{a}(\sigma) = (\sigma = a),
+    \varphi_{b}(\sigma) = (\sigma = b)$とする.
+
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        \node[state,initial]            at (-12, 0)   (p0)  {$p_0$};
+        \node[state]                    at (-10, 0)   (p1)  {$p_1$};
+        \node[state]                    at (-8, 2)    (p2)  {$p_2$};
+        \node[state]                    at (-6, 2)    (p4)  {$p_3$};
+        \node[state]                    at (-4, 0)    (p6)  {$p_4$};
+        \node[state]                    at (-2, -2)   (p7)  {$p_5$};
+        \node[state]                    at (0, -2)    (p9)  {$p_6$};
+        \node[state, accepting]         at (2, 0)     (p12) {$p_7$};
+        \draw [->]
+        (p0) edge[loop above] node{$\lnot \varphi_\#$}  ()
+             edge             node[above]{$\varphi_\#$} (p1)
+        (p1) edge[bend left]  node[above=0.2]{$\varphi_a$}  (p2)
+        (p2) edge             node[above]{$\varphi_b$}  (p4)
+        (p4) edge[bend left]  node[above=0.1]{$\varphi_\#$} (p6)
+        (p6) edge[bend right] node[below]{$\varphi_b$}  (p7)
+        (p7) edge[bend left]  node[above]{$\varphi_a$}  (p9)
+        (p9) edge[bend left]  node[above]{$\varphi_b$}  (p7)
+             edge             node[above=0.2]{$\varphi_\#$} (p12)
+        ;
+      \end{tikzpicture}
+    \end{center}
+
+    $x_2 = x_1.rev()$によるSSTで逆像をとったSFAは以下.
+
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        \node[state,initial]            at (-7,0)      (p27)  {$p_0$};
+        \node[state]                    at (-4,3)      (p26)  {$p_1$};
+        \node[state]                    at (-4,-3)     (p25)  {$p_2$};
+        \node[state]                    at (-2,2)      (p24)  {$p_3$};
+        \node[state]                    at (0,0)       (p23)  {$p_4$};
+        \node[state, accepting]         at (2,0)       (p18) {$p_7$};
+        \draw [->]
+        (p27) edge             node[above=0.2]{$\lnot \varphi_\#$} (p26)
+              edge             node[below=0.2]{$\varphi_\#$}       (p25)
+        (p26) edge[loop above] node[above]{$\lnot \varphi_\#$} ()
+              edge             node[left=0.1]{$\varphi_\#$}       (p25)
+        (p25) edge             node[right=0.2]{$\varphi_a$}        (p24)
+        (p24) edge             node[above=0.1]{$\varphi_b$}        (p23)
+        (p23) edge             node[above]{$\varphi_\#$}       (p18)
+        ;
+      \end{tikzpicture}
+    \end{center}
+
+    $x_1 = x_0.rev()$による逆像をとった最終的なSFAが以下.
+
+    \begin{center}
+      \begin{tikzpicture}[aut]
+        \node[state,initial]            at (-7,0)      (p40)  {$p_0$};
+        \node[state]                    at (-4,3)      (p37)  {$p_1$};
+        \node[state]                    at (-4,-3)     (p35)  {$p_2$};
+        \node[state, accepting]         at (2,0)       (p32) {$p_3$};
+        \draw [->]
+        (p40) edge node{$\varphi_b$} (p37)
+        (p37) edge node{$\varphi_a$} (p35)
+        (p35) edge node{$\varphi_\#$} (p32)
+        ;
+      \end{tikzpicture}
+    \end{center}
+
+    これにより得られる割り当ては
+    \begin{align*}
+      x_0 &= "ba" \\
+      x_1 &= "ab" \\
+      x_2 &= "ba"
+    \end{align*}
+    となる.
+
+    実行時間の平均は$222,468$ns.
   \end{example}
 
+  \begin{example}
+    $x_0, x_1, x_2, x_3, x_4$を文字列変数とする.
+    \begin{align*}
+      x_1 &= x_0 \cdot x_0 \\
+      x_2 &= x_1 \cdot x_1 \\
+      x_3 &= x_2 \cdot x_2 \\
+      x_4 &= x_3 \cdot x_3 \\
+      x_0 &\in ["b" - "z"] \cdot ["b" - "z"]
+    \end{align*}
+
+    これにより得られる割り当ては
+    \begin{align*}
+      x_0 &= "bb" \\
+      x_1 &= "bbbb" \\
+      x_2 &= "bbbbbbbb" \\
+      x_3 &= "bbbbbbbbbbbbbbbb" \\
+      x_4 &= "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    \end{align*}
+    となる.
+    rangeに関する正規表現を含むときはその中で最小の文字を使うため上記のような出力となる.
+
+    実行時間の平均は$1,538,242$ns.
+  \end{example}
+
+  \begin{example}
+    $x_0, x_1, x_2$を文字列変数とする.
+    \begin{align*}
+      x_1 &= x_0 \cdot x_0.rev() \\
+      x_2 &= x_1 \cdot x_0.replace\_all("abc", "xyz") \cdot x_1  \\
+      x_1 &\in "ab"^* \\
+      x_2 &\in "xyz"^+
+    \end{align*}
+
+    充足不能で, 実行時間の平均は$3,094,225$ns.
+  \end{example}
 \end{document}

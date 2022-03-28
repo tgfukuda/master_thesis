@@ -8,51 +8,52 @@ A level-1 auxiliary file: symbolic_sst.aux
 A level-1 auxiliary file: solve.aux
 A level-1 auxiliary file: symbolic_preimage.aux
 A level-1 auxiliary file: implementation.aux
+A level-1 auxiliary file: related_works.aux
 A level-1 auxiliary file: conclusion.aux
 A level-1 auxiliary file: acknoledgement.aux
 The style file: junsrt.bst
 Database file #1: reference.bib
 Warning--can't use both volume and number fields in lin2016string
-You've used 11 entries,
+You've used 14 entries,
             2270 wiz_defined-function locations,
-            623 strings with 7089 characters,
-and the built_in function-call counts, 4808 in all, are:
-= -- 405
-> -- 159
-< -- 20
-+ -- 60
-- -- 49
-* -- 275
-:= -- 580
-add.period$ -- 39
-call.type$ -- 11
-change.case$ -- 11
+            643 strings with 7690 characters,
+and the built_in function-call counts, 5795 in all, are:
+= -- 487
+> -- 186
+< -- 24
++ -- 71
+- -- 57
+* -- 321
+:= -- 700
+add.period$ -- 49
+call.type$ -- 14
+change.case$ -- 14
 chr.to.int$ -- 0
-cite$ -- 12
-duplicate$ -- 285
-empty$ -- 435
-format.name$ -- 98
-if$ -- 1200
+cite$ -- 15
+duplicate$ -- 349
+empty$ -- 531
+format.name$ -- 114
+if$ -- 1447
 int.to.chr$ -- 0
-int.to.str$ -- 11
-missing$ -- 11
-newline$ -- 58
-num.names$ -- 13
-pop$ -- 73
+int.to.str$ -- 14
+missing$ -- 14
+newline$ -- 73
+num.names$ -- 16
+pop$ -- 93
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 226
+skip$ -- 275
 stack$ -- 0
-substring$ -- 297
-swap$ -- 111
-text.length$ -- 20
+substring$ -- 348
+swap$ -- 130
+text.length$ -- 24
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 45
-width$ -- 13
-write$ -- 132
-is.kanji.str$ -- 157
+while$ -- 54
+width$ -- 16
+write$ -- 165
+is.kanji.str$ -- 192
 (There was 1 warning)

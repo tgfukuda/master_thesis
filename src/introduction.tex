@@ -6,45 +6,43 @@
 
   文字列はプログラミングにおける基本的なデータ型の一つであり, 置換, 比較, 正規表現による操作などが
   多く含まれる.
-  文字列の解析手法の一つとして文字列制約があり, Webプログラミングにおける記号的実行を利用した
+  文字列を操作するプログラムにおける解析手法の一つとして文字列制約があり, Webプログラミングにおける記号的実行を利用した
   テストケース生成やXSS解析, モデル検査, SMTソルバ等の様々な領域での応用が考えられている.
-  一般の文字列制約に対する充足可能性判定は決定不能であることが知られており, 容易にPCP(Post Corresponding Problem)
+  一般の文字列制約に対する充足可能性判定は決定不能であることが知られており, 容易にPCP (Post Corresponding Problem)
   に帰着できる一方で, 直線制約というacyclicな形式に制限された制約に関しては決定可能であることが分かっている
   \cite{lin2016string}.
+
   文字列制約に関するソルバにはCVC4\cite{barrett2011cvc4},
-  Ostrich\cite{chen2020decision}, SLOTH\cite{holik2017string}などが考案されている.
-  (ソルバについて列挙する, JSST入れる)
-
-  ChenらによるOstrichでは本研究で構成している逆像とはかなり異なる方法だが,
-  Cost-enriched finite automata(CEFA)\cite{alur2013regular}
-  とトランスデューサーを用いて逆像の計算を行い, CEFAの到達可能性に帰着している.
-  整数の半線形集合に関する制約を含むような文字列制約の判定を行っている.
-  本研究とは整数制約を含まない点と直線制約に含まれるトランスダクションがSSTによるものでも構わないという点で異なる.
-
-  本研究の重要な先行研究であるZhuらによるソルバ\cite{zhu2019sstsolver}ではStreaming String Transducerと
+  Ostrich\cite{chen2020decision}, SLOTH\cite{holik2017string}, Zhuらによるもの\cite{zhu2019sstsolver},
+  釜野らによるもの\cite{kamano2021solver}などが考案されている.
+  ChenらによるOstrichでは,Cost-enriched finite automata (CEFA)\cite{alur2013regular}
+  とトランスデューサーによって文字列制約の充足可能性を判定している.
+  また, 同Chenらは\cite{chen2022solving}においてPrioritized Streaming String Transducersによる
+  拡張なども行っている.
+  ZhuらによるソルバではStreaming String Transducersと
   オートマトンを用いて文字列制約の充足可能性を判定する.
-  String Streaming Transducer(SST)はAlurらによって考案されたトランスダクションの高い表現力を持つ
+  String Streaming Transducers (SST) \cite{alur2011streaming}
+  はAlurらによって考案されたトランスダクションの高い表現力を持つ
   モデルであり, ZhuはこのSSTが合成により閉じていることを利用して,
   本研究のソルバで用いているSSTに似た形式に変換し, 逆像ではなく合成を用いて基礎直線制約と正規制約を表すSSTを作った.
   そしてそのソルバを出力のParikh Imageを表すトランスデューサーに変換し, その半線形集合の空性を調べることにより
-  充足可能性を判定している.
-  ここで用いているSSTはSymbolicなモデルではなく, 決定性である.
-  既存のソルバの課題の一つとしてアルファベットの増加により計算量が大きくなり, 複雑な制約に対しては
-  時間がかかってしまうことがあり, その改善策の候補としてSymbolicなモデルを用いることがある.
+  充足可能性を判定している.ここで用いているSSTは決定性である.
+  釜野らによるソルバは非決定性のSSTとPaikh Automata\cite{cadilhac2012affine}を応用して充足可能性判定を行っている.
 
-  また, 同Chenらは\cite{chen2022solving}においても...
-  PSSTを用いた逆像によるソルバ.
-  WIP
+  既存のソルバの課題の一つとしてアルファベットの増加により計算量が大きくなり, 複雑な制約に対しては
+  時間がかかってしまうことがあり, その改善策の候補としてSymbolicなモデルを用いることが挙げられる.
 
   Symbolic Finite Automata(SFA)は\cite{d2017power}等の研究がなされており,
   UTF8やUTF16など現実的に扱わなければならない巨大なアルファベットに関する問題解決のために考案されたものである.
   通常のDFAやNFAに対して, アルファベットの有限性を利用したアルゴリズムなどは事情が変わることが
   知られており, 例えば最小化についても既存アルゴリズムの計算量とは異なる形で, 活発な研究が行われている.
 
-  （非決定性については触れた方が良い.)
   本研究ではSSTとそれによるオートマトンの逆像により制約の充足可能性を判定する方法をベースに, モデルの遷移を
   論理式により表すSymbolicな性質を導入することで課題の解決を目指す.
-  Symbolic SSTを定義し, その意味論を与え,
-  SFAのSymbolic SSTによる逆像計算アルゴリズムとその形式的な証明を行った.
-  実際に簡単な制約を解くことができる実装をRustで行った.
+  Symbolic SSTを定義し, その意味論を与えた.
+  また, 非決定性SFAの非決定性Symbolic SSTによる逆像計算アルゴリズムとその正当性を証明した.
+  逆像計算においては非決定性のSST, SFAを用いているが, Symbolicであることにより入力に依存した条件が排除できないため,
+  決定性のSymbolic SST, SFAであっても決定性の逆像を表すSFAが構成できないため, 非決定性のSFAによって逆像を構成した.
+  上記のSymbolic SSTとそれを用いた簡単な制約を解くことができるソルバの実装をRustで行った.
+
 \end{document}

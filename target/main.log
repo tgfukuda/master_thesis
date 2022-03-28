@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p3.9.0-u1.27-210218-2.6 (utf8.uptex) (TeX Live 2021) (preloaded format=uplatex 2021.9.8)  26 JAN 2022 13:39
+This is e-upTeX, Version 3.141592653-p3.9.0-u1.27-210218-2.6 (utf8.uptex) (TeX Live 2021) (preloaded format=uplatex 2021.9.8)  31 JAN 2022 14:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -873,6 +873,7 @@ File: l3backend-dvipdfmx.def 2021-03-18 L3 backend support: dvipdfmx
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/solve.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/symbolic_preimage.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/implementation.aux)
+(/Users/fukudataiga/Documents/TeX/master-thesis/target/related_works.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/conclusion.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/acknoledgement.aux))
 \openout1 = `main.aux'.
@@ -999,7 +1000,7 @@ LaTeX Font Info:    Font shape `JY2/hgt/m/n' will be
 ) [1
 
 
-]
+] [2]
 \openout2 = `preliminalies.aux'.
 
  (./preliminalies.tex
@@ -1021,82 +1022,82 @@ LaTeX Font Info:    Font shape `JY2/hmc/bx/n' in size <10> not available
 LaTeX Font Info:    Font shape `JY2/hgt/m/n' will be
 (Font)              scaled to size 9.24683pt on input line 14.
 LaTeX Font Info:    Font shape `JT2/hmc/m/n' will be
-(Font)              scaled to size 6.47278pt on input line 19.
-[2
+(Font)              scaled to size 6.47278pt on input line 21.
+[3
 
 
 
 
 ]
 LaTeX Font Info:    Font shape `JT2/hmc/m/n' will be
-(Font)              scaled to size 4.62341pt on input line 93.
- [3] [4]
+(Font)              scaled to size 4.62341pt on input line 95.
+ [4] [5]
 LaTeX Font Info:    Trying to load font information for U+bbold on input line 2
-51.
+54.
  (/usr/local/texlive/2021/texmf-dist/tex/latex/bbold/Ubbold.fd)
-[5]) [6]
+[6]) [7]
 \openout2 = `symbolic_sst.aux'.
 
  (./symbolic_sst.tex
 第3章
-[7
+[8
 
 
 
 
-] [8]) [9]
+] [9]) [10]
 \openout2 = `solve.aux'.
 
  (./solve.tex
 第4章
-[10
+[11
 
 
 
 
-]) [11]
+]) [12]
 \openout2 = `symbolic_preimage.aux'.
 
  (./symbolic_preimage.tex
 第5章
-[12
+[13
 
 
 
 
-] [13]
-Overfull \hbox (24.00003pt too wide) in paragraph at lines 197--216
+] [14]
+Overfull \hbox (24.00003pt too wide) in paragraph at lines 198--217
  [][][] 
  []
 
-[14]
+[15]
 LaTeX Font Info:    Font shape `JT2/hmc/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 261.
+(Font)              scaled to size 11.09619pt on input line 262.
 LaTeX Font Info:    Font shape `JY2/hmc/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 261.
+(Font)              scaled to size 11.09619pt on input line 262.
 LaTeX Font Info:    Font shape `JT2/hgt/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 261.
+(Font)              scaled to size 11.09619pt on input line 262.
 LaTeX Font Info:    Font shape `JY2/hgt/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 261.
+(Font)              scaled to size 11.09619pt on input line 262.
 LaTeX Font Info:    Font shape `JY2/hmc/m/n' will be
-(Font)              scaled to size 7.39746pt on input line 261.
+(Font)              scaled to size 7.39746pt on input line 262.
 LaTeX Font Info:    Font shape `JY2/hmc/m/n' will be
-(Font)              scaled to size 5.5481pt on input line 261.
- [15]
+(Font)              scaled to size 5.5481pt on input line 262.
+ [16]
 LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 273.
+(Font)              No change on input line 274.
 LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 315.
+(Font)              No change on input line 318.
 
-Overfull \hbox (35.26558pt too wide) detected at line 356
+Overfull \hbox (35.26558pt too wide) detected at line 359
 []
  []
 
-[16]
+[17]
 LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 385.
+(Font)              No change on input line 389.
 
-Overfull \hbox (51.02792pt too wide) in paragraph at lines 390--395
+Overfull \hbox (51.02792pt too wide) in paragraph at lines 394--399
 \JY2/hmc/m/n/10 として $\OML/cmm/m/it/10 g[]$ \JY2/hmc/m/n/10 を定義す
 る\OT1/cmr/m/n/10 . \JY2/hmc/m/n/10 定義より\OT1/cmr/m/n/10 , $[](\OML/cmm
 /m/it/10 g[]\OT1/cmr/m/n/10 ) = [][] \OML/cmm/m/it/10 Var\OT1/cmr/m/n/10 (\OML/
@@ -1106,20 +1107,37 @@ mm/m/it/10 p; ^^L\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )\OML/cmm/m
 /it/10 ; p[]\OT1/cmr/m/n/10 )$
  []
 
-[17]
+[18]
 LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 429.
- [18]
-LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 469.
-LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 493.
-LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 520.
+(Font)              No change on input line 436.
  [19]
 LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
-(Font)              No change on input line 553.
-) [20]
+(Font)              No change on input line 477.
+LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
+(Font)              No change on input line 503.
+LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
+(Font)              No change on input line 533.
+ [20]
+LaTeX Font Info:    Kanji font shape `JY2/hmc/m/it' undefined
+(Font)              No change on input line 569.
+
+Underfull \hbox (badness 1142) in paragraph at lines 596--604
+[]\JY2/hmc/m/n/10 また\OT1/cmr/m/n/10 , $\OML/cmm/m/it/10 p[] [] p[]; p[] \OM
+S/cmsy/m/n/10 2 \OML/cmm/m/it/10 F$ \JY2/hmc/m/n/10 だから $\OML/cmm/m/it/10
+ F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 q[]\OT1/cmr/m/n/10 )$ \JY2/hmc/m/n/10 中
+の変数が $\OML/cmm/m/it/10 k$ \JY2/hmc/m/n/10 個だとすれば $\OML/cmm/
+m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 q[]\OT1/cmr/m/n/10 ) =
+ []
+
+
+Underfull \hbox (badness 1062) in paragraph at lines 596--604
+\OML/cmm/m/it/10 w[]y[] [] w[]y[]w[]; w[] \OMS/cmsy/m/n/10 2 D[]\OML/cmm/m/it/1
+0 ; y[] \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 X$ \JY2/hmc/m/n/10 として一般
+性を失わない\OT1/cmr/m/n/10 . \JY2/hmc/m/n/10 故に遷移は $\OML/cmm/m
+/it/10 g[]$ \JY2/hmc/m/n/10 を用いて
+ []
+
+[21]) [22]
 \openout2 = `implementation.aux'.
 
  (./implementation.tex
@@ -1149,23 +1167,33 @@ Overfull \hbox (20.91034pt too wide) in paragraph at lines 39--40
 ][][][][] 
  []
 
-[21
+[23
 
 
 
 
-] [22] [23]
-Overfull \hbox (14.91028pt too wide) in paragraph at lines 152--154
+] [24] [25]
+Overfull \hbox (14.91028pt too wide) in paragraph at lines 139--141
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][] 
  []
 
-[24]) [25]
+[26] [27] [28]) [29]
+\openout2 = `related_works.aux'.
+
+ (./related_works.tex
+第7章
+) [30
+
+
+
+
+]
 \openout2 = `conclusion.aux'.
 
  (./conclusion.tex
-第7章
-) [26
+第8章
+) [31
 
 
 
@@ -1174,8 +1202,8 @@ Overfull \hbox (14.91028pt too wide) in paragraph at lines 152--154
 \openout2 = `acknoledgement.aux'.
 
  (./acknoledgement.tex
-第8章
-) [27
+第9章
+) [32
 
 
 
@@ -1190,27 +1218,32 @@ LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
 (Font)              No change on input line 30.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
-(Font)              No change on input line 37.
+(Font)              No change on input line 36.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
-(Font)              No change on input line 43.
-LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
-(Font)              No change on input line 50.
+(Font)              No change on input line 48.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
 (Font)              No change on input line 56.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
 (Font)              No change on input line 63.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
-(Font)              No change on input line 70.
+(Font)              No change on input line 69.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
-(Font)              No change on input line 76.
+(Font)              No change on input line 75.
 LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
-(Font)              No change on input line 78.
- [28
+(Font)              No change on input line 82.
+ [33
 
 
 
-])
-[29] (/Users/fukudataiga/Documents/TeX/master-thesis/target/main.aux
+]
+LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
+(Font)              No change on input line 88.
+LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
+(Font)              No change on input line 90.
+LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
+(Font)              No change on input line 97.
+)
+[34] (/Users/fukudataiga/Documents/TeX/master-thesis/target/main.aux
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/abstract.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/introduction.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/preliminalies.aux)
@@ -1218,19 +1251,20 @@ LaTeX Font Info:    Kanji font shape `JY2/hgt/m/it' undefined
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/solve.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/symbolic_preimage.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/implementation.aux)
+(/Users/fukudataiga/Documents/TeX/master-thesis/target/related_works.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/conclusion.aux)
 (/Users/fukudataiga/Documents/TeX/master-thesis/target/acknoledgement.aux))
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 900BE794BBC001FCF4B2C657E414D7C4;2379.
+(rerunfilecheck)             Checksum: 2CA5E89BE75998F6168F706C98B3AED1;2581.
  ) 
 Here is how much of TeX's memory you used:
- 26077 strings out of 479460
- 470078 string characters out of 5870465
- 806019 words of memory out of 5000000
- 43244 multiletter control sequences out of 15000+600000
+ 26204 strings out of 479460
+ 472083 string characters out of 5870465
+ 821337 words of memory out of 5000000
+ 43364 multiletter control sequences out of 15000+600000
  454946 words of font info for 133 fonts, out of 8000000 for 9000
  934 hyphenation exceptions out of 8191
  128i,25n,130p,426b,2130s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on /Users/fukudataiga/Documents/TeX/master-thesis/target/main.dv
-i (32 pages, 220164 bytes).
+i (37 pages, 268000 bytes).

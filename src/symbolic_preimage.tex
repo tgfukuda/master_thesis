@@ -31,8 +31,8 @@
   逆像を表すSFA $A' = \lrangle{\mathcal{A}, Q', I, F', \delta'}$とする.
   $Q' = Q \times (X \rightarrow \mathcal{P}(P \times P))$,
   $F' \subseteq Q'$, $\delta' \subseteq Q' \times \Psi \rightarrow Q'$,
-  $I = \{ (q_0, \id') \mid \forall x \in \dom(\id').\ \id'(x) \subseteq ID
-  s.t. ID = \{ (p, p) \mid p \in P \} \}$である.
+  $I = \{ (q_0, \id') \mid \forall x \in \dom(\id').\ \id'(x) \subseteq ID\
+  s.t.\ ID = \{ (p, p) \mid p \in P \} \}$である.
 
   ここで状態$Q'$はSSTの状態$Q$と各変数に対して各状態からの遷移先を非決定的に表す集合を返す関数の組である.
   この関数が後段のSFAでの遷移をシミュレーションすることになる.
@@ -41,8 +41,8 @@
   各変数の初期の値が$\varepsilon$であることから必要な変数のみを定義域とする関数で各状態から遷移しない関数であれば全て
   初期状態になりうるため, $I$はそれらとSSTの初期状態の組になっている.
 
-  $T = X \rightarrow \mathcal{P}(P \times P)$とする.
-  $g \in T$に対して
+  $G = X \rightarrow \mathcal{P}(P \times P)$とする.
+  $g \in G$に対して
   関係$\transarrow{}{g} \subseteq (\Lambda_{k} \cup X) \times P \times \Psi_{[m]} \times P$を
   $p \transarrow{\varphi}{A} p'$のとき
   $p \transarrow{(\lambda, i) / [\varphi(\lambda)]_i}{g} p'$,
@@ -53,7 +53,8 @@
       \rightarrow (\bigcup_{m \in \mathcal{N}}
       ((\Lambda_{[m]} \cup X)^*) \times P \times \Psi_{[m]} \times P)
   \]
-  を以下のように帰納的に拡張する. \\
+  を以下のように帰納的に拡張する.
+
   \setcounter{equation}{0}
   \begin{align}
     p &\transarrow{
@@ -73,13 +74,14 @@
       \mbox{and} \
         x \in X \tag{\mbox{rule 2}} \label{rule: 2} \\
     p &\transarrow{\varepsilon / [\top]}{g} p \tag{\mbox{rule 3}} \label{rule: 3}
-  \end{align} \\
+  \end{align}
+
   記法として, $p, p' \in P, h \in (\Lambda \cup X)^*$に対して$\Delta_g(p, h, p') = \bigvee \{
     \varphi \mid p \transarrow{h / \varphi}{g} p'
   \}$と定義する. ただし, $\bigvee \emptyset = \bot$.
-  また, $\transarrow{}{} \subseteq \bigcup_{m \in \mathcal{N}} T \times
-    (X \rightarrow (X \cup \Lambda^{[m]})^*) \times (T \times \Psi_{[m]})$を
-  $g, g' \in T$に対して,
+  また, $\transarrow{}{} \subseteq \bigcup_{m \in \mathcal{N}} G \times
+    (X \rightarrow (X \cup \Lambda^{[m]})^*) \times (G \times \Psi_{[m]})$を
+  $g, g' \in G$に対して,
   $\dom(g) = \bigcup_{y \in \scriptsize \dom(g')} Var(\alpha(y))$
   のとき
   $\phi =
@@ -275,9 +277,10 @@
     $|h_1| = 0$のとき
     $p_1 \transarrow{\varepsilon h_2 / [\top] \land \varphi_2}{g} p_3$かつ
     $\top \land \varphi_2 = \varphi_2$より
-    $p_1 \transarrow{\varepsilon / [\top]}{g} p_1
-      \transarrow{h_2 / \varphi_2}{g'} p_3$から成り立つ. \\
-    $|h_1| = k$で成り立つと仮定して$|h_1| = k + 1$で 成り立つことを示す. \\
+    $p_1 \transarrow{\varepsilon / [\top]}{g} p_1 \transarrow{h_2 / \varphi_2}{g'} p_3$から成り立つ.
+
+    $|h_1| = k$で成り立つと仮定して$|h_1| = k + 1$で成り立つことを示す.
+
     $h_1 = (\lambda, i) h, (\lambda, i) \in \Lambda^{[m]}$,
     $p_1 \transarrow{\varphi'_1}{A} p'_1 \in \delta$とする.
     $p_1 \transarrow{h_1 h_2 / \varphi_1 \land \varphi_2}{g} p_3$より\ref{rule: 1}から
@@ -289,13 +292,14 @@
       p'_1 \transarrow{h / \varphi''_1}{g} p_2 \transarrow{h_2 / \varphi_2}{g} p_3
     \]
     より$p_1 \transarrow{h_1 / \varphi_1}{g} p_2$であることが分かるから示された.
+
     $h_1 = x h$のとき
     $p_1 \transarrow{h_1 h_2 / \varphi_1 \land \varphi_2}{g} p_3$より\ref{rule: 2}から
     $(p_1, p'_1) \in g(x)$なる$p'_1$に対して
     $p'_1 \transarrow{h h_2 / \varphi_1 \land \varphi_2}{g} p_3$でなければならない.
     帰納法の仮定よりある$p_2 \in P$に対して
     \[
-      g(p, x) \transarrow{h / \varphi_1}{g} p_2 \transarrow{h_2 / \varphi_2}{g} p_3
+      p'_1 \transarrow{h / \varphi_1}{g} p_2 \transarrow{h_2 / \varphi_2}{g} p_3
     \]
     より$p_1 \transarrow{h_1 / \varphi_1}{g} p_2$であることが分かるから示された.
   \end{proof}
@@ -353,6 +357,7 @@
                   \bigwedge_{x \in \scriptsize \dom(g'')} \bigwedge_{(p, p') \in g''(x)}
                     \bigwedge_{i \in [0, \ldots, k - 1]} \Delta_g(r'_i, \alpha(y_i), r_{i + 1})
     \end{align*}
+
     ここで, $\dom(g') = \bigcup_{y \in \scriptsize \dom(g'')} Var(\beta(y))$に注意すると,
     \begin{align*}
       \varphi_1 &= \bigwedge_{x \in \scriptsize \dom(g')} \bigwedge_{(p, p') \in g'(x)}
@@ -394,7 +399,8 @@
     \[
       g' \transarrow{\beta / \varphi_2}{} g''
     \]
-    が言える. \\
+    が言える.
+
     \begin{align*}
       \dom(g) &= \bigcup_{y \in \scriptsize \dom(g'')} Var(\alpha \circ \beta(y)) \\
              &= \bigcup_{y \in \scriptsize \dom(g'')} (\bigcup_{z \in Var(\beta(y))} Var(\alpha(z))) \\
@@ -407,7 +413,8 @@
     \[
       g \transarrow{\alpha / \varphi_1}{} g'
     \]
-    が言える. \\
+    が言える.
+
     \ref{relation_over_g_is_associative_right}と同様の変形により,
     \[
       \varphi = \varphi_1 \land \varphi_2^\uparrow
@@ -416,7 +423,8 @@
   \end{proof}
 
   \begin{lemma} \label{S_transition_and_g_tansition_are_derived_from_A'_transition}
-    $(q, g) \transarrow{w}{} (q', g')$のとき以下が成り立つ.
+    $(q, g) \transarrow{w}{} (q', g')$のとき,
+    ある$\alpha, \psi, \phi$で以下が成り立つ.
     \begin{align*}
       q \transarrow{\psi / \alpha}{} q' \\
       g \transarrow{\alpha / \phi}{} g' \\
@@ -429,6 +437,7 @@
     $|w| = 0$のとき, $(q, g) \transarrow{\varepsilon}{} (q, g)$である.
     $q \transarrow{\top / \scriptsize \id}{} q$,
     $g \transarrow{\scriptsize \id / \top}{} g$より満たす.
+
     $|w| = k$で成り立つとき, $w = \sigma w'$として$|w| = k + 1$を考える.
     $(q, g) \transarrow{\sigma}{} (q'', g'') \transarrow{w'}{} (q', g')$となる.
     $(q, g) \transarrow{\sigma / \alpha}{} (q'', g'')$より,
@@ -469,6 +478,7 @@
     $|v| = 0$ならば$p \transarrow{\varepsilon}{g'} p$であり,
     $\alpha(\varepsilon) = \varepsilon$より成り立つ.
     $|v| = k$で成り立つとして, $|v| = k + 1$を考える.
+
     $v = \sigma v', \sigma \in \mathcal{D}$を考える.
     $p \transarrow{\sigma}{} p'' \transarrow{v'}{} p'$とすると,
     帰納法の仮定より, $p'' \transarrow{\alpha_w(v')}{g} p'$である.
@@ -478,7 +488,8 @@
     帰納法の仮定より, $p'' \transarrow{\alpha_w(v')}{g} p'$である.
     ここで, $g \transarrow{\alpha / \phi}{} g'$と$\phi(w)$よりある$\varphi$で
     $p \transarrow{\alpha(x) / \varphi}{g} p''$かつ$\varphi(w)$が成り立つ.
-    このとき$p \transarrow{\alpha_w(x)}{g} p''$である. \\
+    このとき$p \transarrow{\alpha_w(x)}{g} p''$である.
+
     ($\because$
     構成法より$\varphi$は$\alpha(x)$に文字列を適用したときに満たさなければならない論理式を全て含む.)
     よって$p \transarrow{\alpha_w(v)}{g} p'$.
@@ -489,27 +500,30 @@
   \end{theorem}
 
   \begin{proof}
-    $(q_0, \id) \transarrow{w}{} (q_f, g_f) \land (q_f, g_f) \in F' \land (q_0, \id) \in I$であるとき,
-    $q_0 \transarrow{w / \alpha_w}{S} q_f$,
-    $p_0 \transarrow{\alpha_w(f(q_f))}{A} p_f \land p_f \in F$を満たすことを言えば良い.
-    $(q_0, \id) \transarrow{w}{} (q_f, g_f) \land (q_f, g_f) \in F'$であるとき,
+    $g_0 \in ID, (q_0, g_0) \in I$とする.
+    $(q_0, g_0) \transarrow{w}{} (q_f, g_f) \land (q_f, g_f) \in F'$であるとき,
+    ある$\alpha, p_f \in P$で$q_0 \transarrow{w / \alpha_w}{S} q_f$,
+    $p_0 \transarrow{\alpha_w(F_S(q_f))}{A} p_f \land p_f \in F$を満たすことを言えば良い.
+    $(q_0, g_0) \transarrow{w}{} (q_f, g_f) \land (q_f, g_f) \in F'$であるとき,
     \ref{S_transition_and_g_tansition_are_derived_from_A'_transition}より
+    ある$\alpha, \psi, \phi$で
     \begin{align*}
       q_0 \transarrow{\psi / \alpha}{S} q_f \\
-      \id \transarrow{\alpha / \phi}{} g_f \\
+      g_0 \transarrow{\alpha / \phi}{} g_f \\
       \psi(w) \land \phi(w)
     \end{align*}
     が成り立つ.
     故に, $q_0 \transarrow{w / \alpha_w}{S} q_f$が成り立つ.
     $(q_f, g_f) \in F'$より,
-    $p_0 \transarrow{f(q_f)}{g_f} p_f \land p_f \in F$である.
+    $p_0 \transarrow{F_S(q_f)}{g_f} p_f \land p_f \in F$である.
     \ref{outputfunction_is_reducible}より
-    $p_0 \transarrow{\alpha_w(f(q_f))}{\scriptsize \id} p_f$であり,
-    $\id$による遷移は$A$での遷移と一致するから示せた.
+    $p_0 \transarrow{\alpha_w(F_S(q_f))}{\scriptsize \id} p_f$であり,
+    $g_0$による遷移は$A$での遷移と一致するから示せた.
   \end{proof}
 
   \begin{lemma} \label{outputfunction_is_derivable}
     $h \in (X \cup \Lambda^{[m]})^*, w \in \mathcal{D}^*$とする.
+    ある$\varphi$に対して
     \[
       p \transarrow{h_w}{g} p' \Rightarrow p \transarrow{h / \varphi}{g} p' \land \varphi(w)
     \]
@@ -518,8 +532,10 @@
   \begin{proof}
     $|h|$に関する帰納法で示す.
     $|h| = 0$のとき$p \transarrow{\varepsilon}{g} p$かつ$p \transarrow{\varepsilon / \top}{g} p$より
-    成り立つ. \\
+    成り立つ.
+
     $|h| = k$で成り立つとして$k + 1$を考える.
+
     $h = (\lambda, i) h', \lambda \in \Lambda, 0 \leq i \le m$のとき,
     $a_i$を$w$の$i$文字目とすると
     $p \transarrow{\lambda(a_i)}{g} p'' \transarrow{h'_w}{g} p'$である.
@@ -533,7 +549,8 @@
     である.
     \ref{relation_over_states_on_g_is_morphism}より,
     $p \transarrow{h / \varphi_1 \land \varphi_2}{g} p'$かつ
-    $\varphi_1(w) \land \varphi_2(w)$より成り立つ.  \\
+    $\varphi_1(w) \land \varphi_2(w)$より成り立つ.
+
     $h = x h'$のとき$(p, p'') \in g(x) \land p'' \transarrow{h_w}{g} p'$である.
     帰納法の仮定より
     \[
@@ -550,55 +567,65 @@
 
   \begin{proof}
     $q_0 \transarrow{w / \alpha_w}{S} q_f, q_f \in \dom(f)$かつ
-    $p_0 \transarrow{\hat{\varepsilon}(\alpha_w(f(q_f)))}{A} p_f, p_f \in F$のとき
-    ある$g_f, \id$で
+    $p_0 \transarrow{\hat{\varepsilon}(\alpha_w(F_S(q_f)))}{A} p_f, p_f \in F$のとき
+    ある$g_f, g_0$で
     \[
-      (q_0, \id) \transarrow{w}{A'} (q_f, g_f) \land (q_f, g_f) \in F' \land (q_0, \id) \in I
+      (q_0, g_0) \transarrow{w}{A'} (q_f, g_f) \land (q_f, g_f) \in F' \land (q_0, g_0) \in I
     \]
     であることを示せば良い.
-    $\forall x \in \dom(\id).\ \id(x) = \{ x \}, \dom(\id) = Var(\alpha_w(f(q_f)))$とする.
-    $p_0 \transarrow{\hat{\varepsilon}(\alpha_w(f(q_f)))}{A} p_f$であるとき,
-    $p_0 \transarrow{\alpha_w(f(q_f))}{\scriptsize \id} p_f$である. \\
+
     $|w| = 0$のとき
-    $q_0 \transarrow{\varepsilon / \scriptsize \id}{S} q_0, q_0 \in \dom(f)$かつ
-    $p_0 \transarrow{\id(f(q_0)))}{A} p_f, p_f \in F$である.
-    $(q_0, \id) \transarrow{\varepsilon}{\scriptsize \id} (q_0, \id)$で,
-    このとき$p_0 \transarrow{f(q_0))}{\scriptsize \id} p_f$より成り立つ. \\
+    $q_0 \transarrow{\varepsilon / \scriptsize \id}{S} q_0, q_0 \in \dom(F_S)$かつ
+    $p_0 \transarrow{\scriptsize \id(F_S(q_0)))}{A} p_f, p_f \in F$である.
+    任意の$g_0 \in ID$に対して
+    $(q_0, g_0) \transarrow{\varepsilon}{g_0} (q_0, g_0)$で,
+    $g_0$により状態が変化しないことに注意すれば$p_0 \transarrow{F_S(q_0))}{g_0} p_f$より成り立つ.
+
     $|w| \ne 0$のとき,
-    $q_0 \transarrow{w / \alpha_w}{S} q_f, q_f \in \dom(f)$より
+    $q_0 \transarrow{w / \alpha_w}{S} q_f, q_f \in \dom(F_S)$より
     $q_0 \transarrow{\psi / \alpha}{S} q_f \land \psi(w)$なる遷移が存在する.
-    また, $p_0 \transarrow{\alpha_w(f(q_f))}{id} p_f, p_f \in F$だから
-    $f(q_f)$中の変数が$k$個だとすれば
-    $f(q_f) = w_0y_0 \ldots w_{k - 1}y_{k - 1}w_k, w_i \in \mathcal{D}^*, y_i \in X$として
-    一般性を失わない.
-    $p_0 \transarrow{w_0}{\scriptsize \id} p'_0 \transarrow{\alpha_w(y_0)}{\scriptsize \id}
-    p_1 \transarrow{}{} \cdots \transarrow{\alpha_w(y_{k - 1})}{\scriptsize \id}
-    p_n \transarrow{w_k}{\scriptsize \id} p_f
-    $とかける($p_i, p'_i \in P$). \\
+
+    $\alpha(F_S(q_f)) = w'_0z_0 \ldots w'_{l - 1}z_{l - 1}w'_l$として,
+    $p_0 \transarrow{w'_0}{A} p_1 \transarrow{}{A} \cdots \transarrow{w_l}{} p_{l + 1}, p_{l + 1} \in F$
+    とする.
+    $g_0$を$z \in Var(\alpha_w(F_S(q_f)))$に対して
+    $p_i \transarrow{w'_i}{A} p_{i + 1}$ならば$(p_{i + 1}, p_{i + 1}) \in g_0(z)$
+    かつ, $(p_{i + 1}, p_{i + 1}) \in g_0(z)$ならば$\exists p_i.\ p_i \transarrow{w'_i}{A} p_{i + 1}$
+    となるように取ると, $g_0 \in ID$かつ$\dom(g_0) = Var(\alpha_w(F_S(q_f)))$が成り立ち, $(q_0, g_0) \in ID$.
+
+    また, $p_0 \transarrow{\hat{\varepsilon}(\alpha_w(F_S(q_f)))}{A} p_f, p_f \in F$だから
+    $F_S(q_f)$中の変数が$k$個だとすれば
+    $F_S(q_f) = w_0y_0 \ldots w_{k - 1}y_{k - 1}w_k, w_i \in \mathcal{D}^*, y_i \in X$として
+    一般性を失わない. 故に遷移は$g_0$を用いて
+    $p_0 \transarrow{w_0}{g_0} p'_0 \transarrow{\alpha_w(y_0)}{g_0}
+    p_1 \transarrow{}{} \cdots \transarrow{\alpha_w(y_{k - 1})}{g_0}
+    p_n \transarrow{w_k}{g_0} p_f$とかける.
+    ここで, 上記$p_{l + 1}$と$p_f$は同一の状態である.
+
     $x \in \bigcup_{0 \leq i \le n} y_i$に対して
-    $g_f(x) = \{ (p'_i, p_{i + 1}) \mid p_i \transarrow{\alpha_w(x)}{\scriptsize \id} p'_{i + 1} \}$
+    $g_f(x) = \{ (p'_i, p_{i + 1}) \mid p'_i \transarrow{\alpha_w(x)}{g_0} p_{i + 1} \}$
     と$g_f$を定義すると
-    $\id \transarrow{\alpha / \phi}{} g_f$.  \\
-    また, $p_0 \transarrow{\alpha_w(f(q_f))}{\scriptsize \id} p_f$と$g_f$の定義より
-    $p_0 \transarrow{f(q_f)}{g_f} p_f$が分かる.
+    $g_0 \transarrow{\alpha / \phi}{} g_f$.  \\
+    また, $p_0 \transarrow{\alpha_w(F_S(q_f))}{\scriptsize \id} p_f$と$g_f$の定義より
+    $p_0 \transarrow{F_S(q_f)}{g_f} p_f$が分かる.
     \ref{outputfunction_is_derivable}より
     $p'_i \transarrow{\alpha(y_i) / \varphi_i}{\scriptsize \id} p_{i + 1}$かつ$\varphi_i(w)$であるから,
     $\forall x \in \dom(g_f).\ \forall (p, p') \in g_f(x).\
-    \Delta_{\scriptsize \id}(p, \alpha(x), p')(w)$.
-    故に, $\phi(w)$.
+    \Delta_{g_0}(p, \alpha(x), p')(w)$.
+    故に, $\phi(w)$を満たす.
     以上より,
-    $q_0 \transarrow{\psi / \alpha}{S} q_f, q_f \in \dom(f)$かつ
-    $id \transarrow{\alpha / \phi}{} g_f$である.
+    $q_0 \transarrow{\psi / \alpha}{S} q_f, q_f \in \dom(F_S)$かつ
+    $g_0 \transarrow{\alpha / \phi}{} g_f$である.
     $w = a_0a_1 \ldots a_n$とおけば,
     $q_0 \transarrow{\psi_0 / \alpha_0}{S} q_1 \transarrow{}{} \cdots
     \transarrow{}{} q_n \transarrow{\psi_n / \alpha_n}{S} q_f$とかけて,
     $\psi_i(a_i)$かつ$\alpha = \alpha_0 \circ \alpha_1 \circ \cdots \circ \alpha_n$が成り立つ.
     \ref{relation_over_g_is_associative_left}より
-    $\id \transarrow{\alpha_0 / \phi_0}{} g_1 \transarrow{}{} \cdots
+    $g_0 \transarrow{\alpha_0 / \phi_0}{} g_1 \transarrow{}{} \cdots
     \transarrow{}{} g_n \transarrow{\alpha_n / \phi_n}{} g_f$かつ
     $\phi = \phi_0 \land \phi_1 \land \cdots \land \phi_n^{\uparrow^{(n)}}$が成り立つ.
     故に構成法から
-    $(q_0, \id) \transarrow{\psi_0 \land \phi_0}{A'} (q_1, g_1) \transarrow{}{} \cdots
+    $(q_0, g_0) \transarrow{\psi_0 \land \phi_0}{A'} (q_1, g_1) \transarrow{}{} \cdots
     \transarrow{}{} (q_n, g_n) \transarrow{\psi_n \land \phi_n}{A'} (q_f, g_f)$
     であり,
     \begin{align*}
@@ -611,11 +638,11 @@
       &= \psi \land \phi
     \end{align*}
     より
-    $(q_0, \id) \transarrow{\psi \land \phi}{A'} (q_f, g_f)$
+    $(q_0, g_0) \transarrow{\psi \land \phi}{A'} (q_f, g_f)$
     が言える.
     $\psi(w) \land \phi(w)$であるから
-    $(q_0, \id) \transarrow{w}{A'} (q_f, g_f)$
-    で, $q_f \in \dom(f)$かつ$p_0 \transarrow{f(q_f)}{g_f} p_f, p_f \in F$
+    $(q_0, g_0) \transarrow{w}{A'} (q_f, g_f)$
+    で, $q_f \in \dom(F_S)$かつ$p_0 \transarrow{F_S(q_f)}{g_f} p_f, p_f \in F$
     より$(q_f, g_f) \in F'$.
   \end{proof}
 
